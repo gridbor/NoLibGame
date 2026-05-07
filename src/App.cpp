@@ -14,12 +14,12 @@ App::App()
 	m_camera = std::make_unique<Camera>();
 	m_shaders = std::make_unique<Shaders>();
 	m_inputs = std::make_unique<Inputs>();
-	m_triangle = std::make_unique<Plane>();
+	m_testObject = std::make_unique<Plane>();
 }
 
 App::~App()
 {
-	m_triangle.reset();
+	m_testObject.reset();
 	m_inputs.reset();
 	m_shaders.reset();
 	m_camera.reset();
@@ -35,7 +35,7 @@ void App::Init(HWND hwnd, int width, int height)
 
 	ShaderProgram* program = m_shaders->CreateShaderProgram("default", "shaders/default.vert", "shaders/default.frag");
 	m_camera->Init(45.f, (float)m_width / (float)m_height, 0.1f, 1000.f);
-	m_triangle->Init();
+	m_testObject->Init();
 
 	m_inited = true;
 }
@@ -81,7 +81,7 @@ void App::RenderFrame()
 
 	m_camera->RefreshBuffer();
 
-	m_triangle->Render();
+	m_testObject->Render();
 }
 
 void App::Update(float deltaTime)

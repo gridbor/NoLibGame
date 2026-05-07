@@ -62,3 +62,38 @@ inline Matrix4 LookAt(Vector3 eye, Vector3 center, Vector3 worldUp)
 
 
 #include "Quaternion.h"
+
+
+inline float Dot(const Quaternion& q1, const Quaternion& q2) { return q1.w * q2.w + q1.x * q2.x + q1.y * q2.y + q1.z * q2.z; }
+inline Quaternion Lerp(const Quaternion& q1, const Quaternion& q2, float t)
+{
+	Quaternion result;
+	float invT = 1.f - t;
+	result.w = q1.w * invT + q2.w * t;
+	result.x = q1.x * invT + q2.x * t;
+	result.y = q1.y * invT + q2.y * t;
+	result.z = q1.z * invT + q2.z * t;
+	result.Normalize();
+	return result;
+}
+inline Quaternion Slerp(Quaternion q1, Quaternion q2, float t)
+{
+	float cosTheta = Dot(q1, q2);
+	if (cosTheta < 0.f) {
+		q2 = q2 * -1.f;
+		cosTheta = -cosTheta;
+	}
+	if (NearlyEquals(cosTheta, 1.f, 0.0001f)) {
+		return Lerp(q1, q2, t);
+	}
+	float angle = std::acosf(cosTheta);
+	float sinTheta = std::sinf(angle);
+	float t0 = std::sinf((1.f - t) * angle) / sinTheta;
+	float t1 = std::sinf(t * angle) / sinTheta;
+	return Quaternion(
+		q1.w * t0 + q2.w * t1,
+		q1.x * t0 + q2.x * t1,
+		q1.y * t0 + q2.y * t1,
+		q1.z * t0 + q2.z * t1
+	);
+}

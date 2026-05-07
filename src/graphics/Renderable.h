@@ -62,4 +62,5 @@ protected:
 	std::vector<Vertex> m_vertices;
 	std::vector<uint32_t> m_indices;
 	Matrix4 m_modelMatrix{};
+	Quaternion m_rotation{};
 };
