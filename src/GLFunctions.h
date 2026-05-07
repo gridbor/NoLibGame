@@ -1,0 +1,54 @@
+#pragma once
+#include <iostream>
+#include <Windows.h>
+#include <GL/GL.h>
+#include <GL/glext.h>
+#include <GL/wglext.h>
+
+
+#define GL_FUNCTIONS_LIST \
+	GL_FUNC(PFNWGLCREATECONTEXTATTRIBSARBPROC, wglCreateContextAttribsARB) \
+	GL_FUNC(PFNWGLCHOOSEPIXELFORMATARBPROC, wglChoosePixelFormatARB) \
+	GL_FUNC(PFNGLCREATESHADERPROC, glCreateShader) \
+	GL_FUNC(PFNGLSHADERSOURCEPROC, glShaderSource) \
+	GL_FUNC(PFNGLCOMPILESHADERPROC, glCompileShader) \
+	GL_FUNC(PFNGLCREATEPROGRAMPROC, glCreateProgram) \
+	GL_FUNC(PFNGLUSEPROGRAMPROC, glUseProgram) \
+	GL_FUNC(PFNGLGETSHADERIVPROC, glGetShaderiv) \
+	GL_FUNC(PFNGLGETSHADERINFOLOGPROC, glGetShaderInfoLog) \
+	GL_FUNC(PFNGLATTACHSHADERPROC, glAttachShader) \
+	GL_FUNC(PFNGLLINKPROGRAMPROC, glLinkProgram) \
+	GL_FUNC(PFNGLGETPROGRAMIVPROC, glGetProgramiv) \
+	GL_FUNC(PFNGLGETPROGRAMINFOLOGPROC, glGetProgramInfoLog) \
+	GL_FUNC(PFNGLDELETESHADERPROC, glDeleteShader) \
+	GL_FUNC(PFNGLDELETEPROGRAMPROC, glDeleteProgram) \
+	GL_FUNC(PFNGLCREATEVERTEXARRAYSPROC, glCreateVertexArrays) \
+	GL_FUNC(PFNGLCREATEBUFFERSPROC, glCreateBuffers) \
+	GL_FUNC(PFNGLNAMEDBUFFERDATAPROC, glNamedBufferData) \
+	GL_FUNC(PFNGLVERTEXARRAYVERTEXBUFFERPROC, glVertexArrayVertexBuffer) \
+	GL_FUNC(PFNGLVERTEXARRAYELEMENTBUFFERPROC, glVertexArrayElementBuffer) \
+	GL_FUNC(PFNGLENABLEVERTEXARRAYATTRIBPROC, glEnableVertexArrayAttrib) \
+	GL_FUNC(PFNGLVERTEXARRAYATTRIBFORMATPROC, glVertexArrayAttribFormat) \
+	GL_FUNC(PFNGLVERTEXARRAYATTRIBBINDINGPROC, glVertexArrayAttribBinding) \
+	GL_FUNC(PFNGLBINDVERTEXARRAYPROC, glBindVertexArray) \
+	GL_FUNC(PFNGLNAMEDBUFFERSTORAGEPROC, glNamedBufferStorage) \
+	GL_FUNC(PFNGLBINDBUFFERBASEPROC, glBindBufferBase) \
+	GL_FUNC(PFNGLNAMEDBUFFERSUBDATAPROC, glNamedBufferSubData) \
+	GL_FUNC(PFNGLGETUNIFORMLOCATIONPROC, glGetUniformLocation) \
+	GL_FUNC(PFNGLUNIFORMMATRIX4FVPROC, glUniformMatrix4fv) \
+	GL_FUNC(PFNGLDELETEBUFFERSPROC, glDeleteBuffers)
+// GL_FUNC(PFN_PROC, _)
+
+
+#define GL_FUNC(type, name) inline type name = nullptr;
+	GL_FUNCTIONS_LIST
+#undef GL_FUNC
+
+
+inline void LoadGLFunctions() {
+#define GL_FUNC(type, name) \
+	name = (type)wglGetProcAddress(#name); \
+	if (!name) std::cerr << "Failed to load " << #name << std::endl;
+	GL_FUNCTIONS_LIST
+#undef GL_FUNC
+}
