@@ -5,6 +5,9 @@
 
 inline const float Pi = 3.14159265358979323846f;
 
+inline float ToRadians(float degree) { return degree * Pi / 180.f; }
+inline float ToDegree(float radians) { return radians * 180.f / Pi; }
+
 inline const Vector3 ZeroVector = Vector3{};
 inline const Vector3 UpVector = Vector3{ 0.f, 0.f, 1.f };
 inline const Vector3 ForwardVector = Vector3{ 1.f, 0.f, 0.f };

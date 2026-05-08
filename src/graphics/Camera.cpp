@@ -15,6 +15,7 @@ Camera::~Camera()
 void Camera::Init(float fov, float aspect, float Near, float Far)
 {
 	m_perspective = Perspective(fov, aspect, Near, Far);
+	auto transform = GetComponent<components::Transform>();
 	m_view = LookAt(Vector3(0.f, -3.f, 3.f), Vector3(), UpVector);
 	m_data.projection = m_perspective;
 	m_data.view = m_view;

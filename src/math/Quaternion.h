@@ -88,4 +88,40 @@ struct Quaternion {
 		mat.m22 = 1.f - 2.f * (x * x + y * y);
 		return mat;
 	}
+
+	static inline Quaternion FromMatrix(const Matrix4& mat)
+	{
+		Quaternion q{};
+		float tr = mat.m00 + mat.m11 + mat.m22;
+		float s;
+		if (tr > 0) {
+			s = std::sqrtf(tr + 1.f) * 2.f;
+			q.w = 0.25f * s;
+			q.x = (mat.m12 - mat.m21) / s;
+			q.y = (mat.m20 - mat.m02) / s;
+			q.z = (mat.m01 - mat.m10) / s;
+		}
+		else if ((mat.m00 > mat.m11) && (mat.m00 > mat.m22)) {
+			s = std::sqrtf(1.f + mat.m00 - mat.m11 - mat.m22) * 2.f;
+			q.w = (mat.m12 - mat.m21) / s;
+			q.x = 0.25f * s;
+			q.y = (mat.m10 + mat.m01) / s;
+			q.z = (mat.m20 + mat.m02) / s;
+		}
+		else if (mat.m11 > mat.m22) {
+			s = std::sqrtf(1.f + mat.m11 - mat.m00 - mat.m22) * 2.f;
+			q.w = (mat.m20 - mat.m02) / s;
+			q.x = (mat.m10 + mat.m01) / s;
+			q.y = 0.25f * s;
+			q.z = (mat.m21 + mat.m12) / s;
+		}
+		else {
+			s = std::sqrtf(1.f + mat.m22 - mat.m00 - mat.m11) * 2.f;
+			q.w = (mat.m01 - mat.m10) / s;
+			q.x = (mat.m20 + mat.m02) / s;
+			q.y = (mat.m21 + mat.m12) / s;
+			q.z = 0.25f * s;
+		}
+		return q;
+	}
 };
