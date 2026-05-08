@@ -32,6 +32,18 @@ inline Vector4 Cross(const Vector4& v1, const Vector4& v2)
 	);
 }
 
+inline Matrix4 Orthographic(float Left, float Right, float Bottom, float Top, float Near, float Far)
+{
+	Matrix4 result{ 0.f };
+	result.m00 = 2.f / (Right - Left);
+	result.m11 = 2.f / (Top - Bottom);
+	result.m22 = -(2.f / (Far - Near));
+	result.m4[0] = -((Right + Left) / (Right - Left));
+	result.m4[1] = -((Top + Bottom) / (Top - Bottom));
+	result.m4[2] = -((Far + Near) / (Far - Near));
+	return result;
+}
+
 inline Matrix4 Perspective(float FOVDegree, float Aspect, float Near, float Far)
 {
 	float FOVRadians = FOVDegree * Pi / 180.f;

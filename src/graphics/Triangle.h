@@ -2,7 +2,7 @@
 #include "Renderable.h"
 
 
-class Triangle : public Renderable {
+class Triangle : public Renderable<Vertex> {
 public:
 	Triangle()
 	{
@@ -16,16 +16,14 @@ public:
 	{
 	}
 
-	virtual void Init() override
+	void Init() override
 	{
-		Renderable::Init();
-	}
+		CreateArrayAndBuffers();
 
-	virtual void Render() override
-	{
-		Renderable::Render();
+		SetAttribute(0, 3, offsetof(Vertex, position));
+		SetAttribute(1, 3, offsetof(Vertex, color));
+		SetAttribute(2, 3, offsetof(Vertex, normal));
+		SetAttribute(3, 2, offsetof(Vertex, uv));
 	}
-
-private:
 
 };

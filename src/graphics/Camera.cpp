@@ -1,4 +1,6 @@
 #include "Camera.h"
+#include "utils/Inputs.h"
+#include "components/Transform.h"
 
 
 Camera::Camera()
@@ -28,6 +30,16 @@ void Camera::InputProcess()
 
 void Camera::Update(float deltaTime)
 {
+	auto tc = GetComponent<components::Transform>();
+	Matrix4 move{};
+	if (Inputs::Get().IsKeyDown('W')) move.Translate(Vector3(0.f, 1.f, -1.f) * deltaTime);
+	if (Inputs::Get().IsKeyDown('A')) move.Translate(Vector3(-1.f, 0.f, 0.f) * deltaTime);
+	if (Inputs::Get().IsKeyDown('S')) move.Translate(Vector3(0.f, -1.f, 1.f) * deltaTime);
+	if (Inputs::Get().IsKeyDown('D')) move.Translate(Vector3(1.f, 0.f, 0.f) * deltaTime);
+	if (Inputs::Get().IsKeyDown('Q')) move.Translate(Vector3(0.f, 0.f, -1.f) * deltaTime);
+	if (Inputs::Get().IsKeyDown('E')) move.Translate(Vector3(0.f, 0.f, 1.f) * deltaTime);
+	m_view = move * m_view;
+	m_data.view = m_view;
 }
 
 void Camera::RefreshBuffer()

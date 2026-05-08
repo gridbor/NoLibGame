@@ -4,7 +4,7 @@
 #include "utils/Inputs.h"
 
 
-class Plane : public Renderable {
+class Plane : public Renderable<Vertex> {
 public:
 	Plane()
 	{
@@ -21,7 +21,12 @@ public:
 
 	virtual void Init() override
 	{
-		Renderable::Init();
+		CreateArrayAndBuffers();
+
+		SetAttribute(0, 3, offsetof(Vertex, position));
+		SetAttribute(1, 3, offsetof(Vertex, color));
+		SetAttribute(2, 3, offsetof(Vertex, normal));
+		SetAttribute(3, 2, offsetof(Vertex, uv));
 	}
 
 	virtual void Render() override

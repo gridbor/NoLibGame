@@ -2,6 +2,11 @@
 #include "math/Math.h"
 
 
+struct SimpleVertex {
+	Vector3 position;
+	Vector3 color;
+};
+
 struct Vertex {
 	Vector3 position;
 	Vector3 color;

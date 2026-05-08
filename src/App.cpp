@@ -6,6 +6,7 @@
 #include "graphics/Plane.h"
 #include "utils/Logger.h"
 #include "utils/Inputs.h"
+#include "graphics/gizmo/CoordinateSystem.h"
 
 
 App::App()
@@ -14,7 +15,7 @@ App::App()
 	m_camera = std::make_unique<Camera>();
 	m_shaders = std::make_unique<Shaders>();
 	m_inputs = std::make_unique<Inputs>();
-	m_testObject = std::make_unique<Plane>();
+	m_testObject = std::make_unique<gizmo::CoordinateSystem>();
 }
 
 App::~App()
@@ -33,7 +34,7 @@ void App::Init(HWND hwnd, int width, int height)
 	m_width = width;
 	m_height = height;
 
-	ShaderProgram* program = m_shaders->CreateShaderProgram("default", "shaders/default.vert", "shaders/default.frag");
+	ShaderProgram* program = m_shaders->CreateShaderProgram("default", "shaders/color_only.vert", "shaders/color_only.frag");
 	m_camera->Init(45.f, (float)m_width / (float)m_height, 0.1f, 1000.f);
 	m_testObject->Init();
 
@@ -86,4 +87,5 @@ void App::RenderFrame()
 
 void App::Update(float deltaTime)
 {
+	m_camera->Update(deltaTime);
 }

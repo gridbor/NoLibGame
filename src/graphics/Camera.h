@@ -1,9 +1,10 @@
 #pragma once
 #include "graphics/RenderData.h"
 #include "GLFunctions.h"
+#include "components/ComponentSystem.h"
 
 
-class Camera {
+class Camera : public components::ComponentSystem {
 public:
 	Camera();
 	virtual ~Camera();

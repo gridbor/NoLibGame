@@ -1,4 +1,5 @@
 #include "Inputs.h"
+#include "Logger.h"
 
 
 Inputs::Inputs()
@@ -28,6 +29,7 @@ bool Inputs::IsMouseButtonPressed(const EMouseButton& button) const
 
 void Inputs::AddKey(unsigned int key)
 {
+	if (IsKeyDown(key)) return;
 	m_keyboard.push_back(key);
 }
 
