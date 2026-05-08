@@ -16,9 +16,14 @@ void Camera::Init(float fov, float aspect, float Near, float Far)
 {
 	m_perspective = Perspective(fov, aspect, Near, Far);
 	auto transform = GetComponent<components::Transform>();
-	m_view = LookAt(Vector3(0.f, -3.f, 3.f), Vector3(), UpVector);
+	m_view = LookAt(Vector3(0.f, 0.f, 3.f), Vector3(), RightVector);// UpVector);
 	m_data.projection = m_perspective;
 	m_data.view = m_view;
+	Vector3 p;
+	Quaternion q;
+	Vector3 s;
+	MatrixDecompose(m_view, p, q, s);
+	LLog("{}\nPos: {}\nRot: {}\nScale: {}", m_view.ToString(), p.ToString(), q.ToString(), s.ToString());
 
 	glCreateBuffers(1, &m_uniformID);
 	glNamedBufferStorage(m_uniformID, sizeof(CameraData), &m_data, GL_DYNAMIC_STORAGE_BIT);

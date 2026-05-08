@@ -5,37 +5,48 @@ namespace gizmo {
 
 	CoordinateSystem::CoordinateSystem()
 	{
-		float s = 0.1f;
+		float s = 0.06f;
 		float ps = 2.f * s;
 		float w = 1.f - (2.f * ps);
 		float hs = s * 0.5f;
-		for (size_t i = 0; i < 13; i++) {
-			Vector3 v{};
-			size_t im = i % 4;
-			if (i != 12) {
-				v.x = (i < 8 ? hs : (ps * 0.5f)) * (im < 2 ? 1.f : -1.f);
-				v.y = (i < 4 ? (hs * (i == 2 ? -1.f : 1.f)) : w);
-				v.z = (i < 8 ? hs : (ps * 0.5f)) * (im == 1 || im == 2 ? -1.f : 1.f);
+		for (size_t a = 0; a < 3; a++) {
+			int vcount = m_vertices.size();
+			for (size_t i = 0; i < 13; i++) {
+				Vector3 v{};
+				size_t im = i % 4;
+				if (i != 12) {
+					v.x = (i < 8 ? hs : (ps * 0.5f)) * (im < 2 ? 1.f : -1.f);
+					v.y = (i < 4 ? (hs * (i == 2 ? -1.f : 1.f)) : w);
+					v.z = (i < 8 ? hs : (ps * 0.5f)) * (im == 1 || im == 2 ? -1.f : 1.f);
+				}
+				else {
+					v.x = 0.f;
+					v.y = 1.f;
+					v.z = 0.f;
+				}
+				float co = (float)im * 0.2f;
+				if (a < 1) {
+					m_vertices.push_back(SimpleVertex{ Vector3(v.y, v.x, v.z), Vector3(1.f - co, 0.f, 0.f) });
+				}
+				else if (a < 2) {
+					m_vertices.push_back(SimpleVertex{ Vector3(v.x, v.y, v.z), Vector3(0.f, 1.f - co, 0.f) });
+				}
+				else {
+					m_vertices.push_back(SimpleVertex{ Vector3(v.x, v.z, v.y), Vector3(0.f, 0.f, 1.f - co) });
+				}
 			}
-			else {
-				v.x = 0.f;
-				v.y = 1.f;
-				v.z = 0.f;
-			}
-			float co = (float)im * 0.2f;
-			m_vertices.push_back(SimpleVertex{ v, Vector3{ 0.f, 1.f - co, 0.f}});
+			m_indices.insert(m_indices.end(), {
+				(unsigned short)(vcount + 0), (unsigned short)(vcount + 5), (unsigned short)(vcount + 1), (unsigned short)(vcount + 0), (unsigned short)(vcount + 4), (unsigned short)(vcount + 5),
+				(unsigned short)(vcount + 3), (unsigned short)(vcount + 4), (unsigned short)(vcount + 0), (unsigned short)(vcount + 3), (unsigned short)(vcount + 7), (unsigned short)(vcount + 4),
+				(unsigned short)(vcount + 2), (unsigned short)(vcount + 6), (unsigned short)(vcount + 7), (unsigned short)(vcount + 2), (unsigned short)(vcount + 7), (unsigned short)(vcount + 3),
+				(unsigned short)(vcount + 1), (unsigned short)(vcount + 5), (unsigned short)(vcount + 6), (unsigned short)(vcount + 1), (unsigned short)(vcount + 6), (unsigned short)(vcount + 2),
+				(unsigned short)(vcount + 8), (unsigned short)(vcount + 9), (unsigned short)(vcount + 10), (unsigned short)(vcount + 8), (unsigned short)(vcount + 10), (unsigned short)(vcount + 11),
+				(unsigned short)(vcount + 8), (unsigned short)(vcount + 12), (unsigned short)(vcount + 9),
+				(unsigned short)(vcount + 8), (unsigned short)(vcount + 11), (unsigned short)(vcount + 12),
+				(unsigned short)(vcount + 11), (unsigned short)(vcount + 10), (unsigned short)(vcount + 12),
+				(unsigned short)(vcount + 9), (unsigned short)(vcount + 12), (unsigned short)(vcount + 10)
+			});
 		}
-		m_indices = {
-			0, 5, 1, 0, 4, 5,
-			3, 4, 0, 3, 7, 4,
-			2, 6, 7, 2, 7, 3,
-			1, 5, 6, 1, 6, 2,
-			8, 9, 10, 8, 10, 11,
-			8, 12, 9,
-			8, 11, 12,
-			11, 10, 12,
-			9, 12, 10
-		};
 	}
 
 	CoordinateSystem::~CoordinateSystem()

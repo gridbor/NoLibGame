@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 
 
 struct Quaternion {
@@ -47,6 +48,19 @@ struct Quaternion {
 	inline Quaternion operator/(float s) const { return Quaternion(w / s, x / s, y / s, z / s); }
 	inline Quaternion& operator/=(float s) { w /= s; x /= s; y /= s; z /= s; return *this; }
 
+	inline Vector3 RotateVector(const Vector3& v)
+	{
+		Vector3 qv{ x, y, z };
+		Vector3 t = Cross(qv, v);
+		t *= 2.f;
+		Vector3 result = Cross(qv, t);
+		return Vector3(
+			v.x + w * t.x + result.x,
+			v.y + w * t.y + result.y,
+			v.z + w * t.z + result.z
+		);
+	}
+
 	inline float LengthSqr() const { return w * w + x * x + y * y + z * z; }
 	inline float Length() const { return std::sqrtf(LengthSqr()); }
 	inline Quaternion Conjugate() const { return Quaternion(w, -x, -y, -z); }
@@ -89,39 +103,5 @@ struct Quaternion {
 		return mat;
 	}
 
-	static inline Quaternion FromMatrix(const Matrix4& mat)
-	{
-		Quaternion q{};
-		float tr = mat.m00 + mat.m11 + mat.m22;
-		float s;
-		if (tr > 0) {
-			s = std::sqrtf(tr + 1.f) * 2.f;
-			q.w = 0.25f * s;
-			q.x = (mat.m12 - mat.m21) / s;
-			q.y = (mat.m20 - mat.m02) / s;
-			q.z = (mat.m01 - mat.m10) / s;
-		}
-		else if ((mat.m00 > mat.m11) && (mat.m00 > mat.m22)) {
-			s = std::sqrtf(1.f + mat.m00 - mat.m11 - mat.m22) * 2.f;
-			q.w = (mat.m12 - mat.m21) / s;
-			q.x = 0.25f * s;
-			q.y = (mat.m10 + mat.m01) / s;
-			q.z = (mat.m20 + mat.m02) / s;
-		}
-		else if (mat.m11 > mat.m22) {
-			s = std::sqrtf(1.f + mat.m11 - mat.m00 - mat.m22) * 2.f;
-			q.w = (mat.m20 - mat.m02) / s;
-			q.x = (mat.m10 + mat.m01) / s;
-			q.y = 0.25f * s;
-			q.z = (mat.m21 + mat.m12) / s;
-		}
-		else {
-			s = std::sqrtf(1.f + mat.m22 - mat.m00 - mat.m11) * 2.f;
-			q.w = (mat.m01 - mat.m10) / s;
-			q.x = (mat.m20 + mat.m02) / s;
-			q.y = (mat.m21 + mat.m12) / s;
-			q.z = 0.25f * s;
-		}
-		return q;
-	}
+	inline std::string ToString() const { return "{ W=" + std::to_string(w) + ", X=" + std::to_string(x) + ", Y=" + std::to_string(y) + ", Z=" + std::to_string(z) + " }"; }
 };

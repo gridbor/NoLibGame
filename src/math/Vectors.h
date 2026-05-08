@@ -1,5 +1,6 @@
 #pragma once
 #include <cmath>
+#include <string>
 
 
 struct Vector2 {
@@ -41,6 +42,8 @@ struct Vector2 {
 		}
 		return Vector2();
 	}
+
+	inline std::string ToString() const { return "{ X=" + std::to_string(x) + ", Y=" + std::to_string(y) + " }"; }
 };
 
 
@@ -93,6 +96,8 @@ struct Vector3 {
 		}
 		return Vector3();
 	}
+
+	inline std::string ToString() const { return "{ X=" + std::to_string(x) + ", Y=" + std::to_string(y) + ", Z=" + std::to_string(z) + " }"; }
 };
 
 
@@ -146,4 +151,6 @@ struct Vector4 {
 		}
 		return Vector4();
 	}
+
+	inline std::string ToString() const { return "{ X=" + std::to_string(x) + ", Y=" + std::to_string(y) + ", Z=" + std::to_string(z) + ", W=" + std::to_string(w) + " }"; }
 };

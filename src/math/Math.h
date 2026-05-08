@@ -1,4 +1,6 @@
 #pragma once
+
+
 #include "Vectors.h"
 #include "Matrices.h"
 
@@ -111,4 +113,64 @@ inline Quaternion Slerp(Quaternion q1, Quaternion q2, float t)
 		q1.y * t0 + q2.y * t1,
 		q1.z * t0 + q2.z * t1
 	);
+}
+inline Quaternion QuaternionFromMatrix(const Matrix4& mat)
+{
+	Quaternion q{};
+	float tr = mat.m00 + mat.m11 + mat.m22;
+	float s;
+	if (tr > 0) {
+		s = std::sqrtf(tr + 1.f) * 2.f;
+		q.w = 0.25f * s;
+		q.x = (mat.m12 - mat.m21) / s;
+		q.y = (mat.m20 - mat.m02) / s;
+		q.z = (mat.m01 - mat.m10) / s;
+	}
+	else if ((mat.m00 > mat.m11) && (mat.m00 > mat.m22)) {
+		s = std::sqrtf(1.f + mat.m00 - mat.m11 - mat.m22) * 2.f;
+		q.w = (mat.m12 - mat.m21) / s;
+		q.x = 0.25f * s;
+		q.y = (mat.m10 + mat.m01) / s;
+		q.z = (mat.m20 + mat.m02) / s;
+	}
+	else if (mat.m11 > mat.m22) {
+		s = std::sqrtf(1.f + mat.m11 - mat.m00 - mat.m22) * 2.f;
+		q.w = (mat.m20 - mat.m02) / s;
+		q.x = (mat.m10 + mat.m01) / s;
+		q.y = 0.25f * s;
+		q.z = (mat.m21 + mat.m12) / s;
+	}
+	else {
+		s = std::sqrtf(1.f + mat.m22 - mat.m00 - mat.m11) * 2.f;
+		q.w = (mat.m01 - mat.m10) / s;
+		q.x = (mat.m20 + mat.m02) / s;
+		q.y = (mat.m21 + mat.m12) / s;
+		q.z = 0.25f * s;
+	}
+	return q;
+}
+
+
+inline void MatrixDecompose(const Matrix4& M, Vector3& position, Quaternion& rotation, Vector3& scale)
+{
+	position.x = M.m30; position.y = M.m31; position.z = M.m32;
+	scale.x = std::sqrtf(M.m[0] * M.m[0] + M.m[1] * M.m[1] + M.m[2] * M.m[2]);
+	scale.y = std::sqrtf(M.m[4] * M.m[4] + M.m[5] * M.m[5] + M.m[6] * M.m[6]);
+	scale.z = std::sqrtf(M.m[8] * M.m[8] + M.m[9] * M.m[9] + M.m[10] * M.m[10]);
+	Matrix4 cm{ M.m };
+	for (int i = 0; i < 3; i++) {
+		bool sz = NearlyEquals(scale.v[i], 0.f);
+		float invScale = sz ? 0.f : (1.f / scale.v[i]);
+		if (sz) {
+			cm.m[i * 4 + 0] = i == 0 ? 1.f : 0.f;
+			cm.m[i * 4 + 1] = i == 1 ? 1.f : 0.f;
+			cm.m[i * 4 + 2] = i == 2 ? 1.f : 0.f;
+		}
+		else {
+			cm.m[i * 4 + 0] *= invScale;
+			cm.m[i * 4 + 1] *= invScale;
+			cm.m[i * 4 + 2] *= invScale;
+		}
+	}
+	rotation = QuaternionFromMatrix(cm);
 }
