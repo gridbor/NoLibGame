@@ -26,6 +26,5 @@ protected:
 	CameraData m_data{};
 	// In Radians
 	Vector3 m_eulerAngles{};
-	Matrix4 m_correction{ 0.f };
 
 };

@@ -31,6 +31,8 @@ struct Vector2 {
 	inline Vector2& operator*=(float s) { x *= s; y *= s; return *this; }
 	inline Vector2& operator/=(float s) { x /= s; y /= s; return *this; }
 
+	inline bool operator==(const Vector2& v) const { return NearlyEquals(x, v.x) && NearlyEquals(y, v.y); }
+
 	inline float Length() const { return std::sqrtf(x * x + y * y); }
 	inline float LenghtSqr() const { return x * x + y * y; }
 
@@ -78,6 +80,8 @@ struct Vector3 {
 	inline Vector3& operator+=(float s) { x += s; y += s; z += s; return *this; }
 	inline Vector3& operator*=(float s) { x *= s; y *= s; z *= s; return *this; }
 	inline Vector3& operator/=(float s) { x /= s; y /= s; z /= s; return *this; }
+
+	inline bool operator==(const Vector3& v) const { return NearlyEquals(x, v.x) && NearlyEquals(y, v.y) && NearlyEquals(z, v.z); }
 
 	inline float Length() const { return std::sqrtf(x * x + y * y + z * z); }
 	inline float LenghtSqr() const { return x * x + y * y + z * z; }
@@ -143,6 +147,8 @@ struct Vector4 {
 	inline Vector4& operator+=(float s) { x += s; y += s; z += s; w += s; return *this; }
 	inline Vector4& operator*=(float s) { x *= s; y *= s; z *= s; w *= s; return *this; }
 	inline Vector4& operator/=(float s) { x /= s; y /= s; z /= s; w /= s; return *this; }
+
+	inline bool operator==(const Vector4& v) const { return NearlyEquals(x, v.x) && NearlyEquals(y, v.y) && NearlyEquals(z, v.z) && NearlyEquals(w, v.w); }
 
 	inline float Length() const { return std::sqrtf(x * x + y * y + z * z + w * w); }
 	inline float LenghtSqr() const { return x * x + y * y + z * z + w * w; }

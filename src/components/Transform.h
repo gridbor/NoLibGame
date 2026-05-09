@@ -15,17 +15,20 @@ namespace components {
 		inline void SetPosition(const Vector3& v)
 		{
 			m_position = v;
+			m_updated = true;
 		}
 		inline const Quaternion& GetRotation() const { return m_rotation; }
 		inline void SetRotation(const Quaternion& q)
 		{
 			m_rotation = q;
 			m_rotation.Normalize();
+			m_updated = true;
 		}
 		inline const Vector3& GetScale() const { return m_scale; }
 		inline void SetScale(const Vector3& v)
 		{
 			m_scale = v;
+			m_updated = true;
 		}
 		inline Matrix4 GetMatrix() const
 		{
@@ -43,16 +46,19 @@ namespace components {
 		{
 			Vector3 worldForward = m_rotation * ForwardVector;
 			m_position += worldForward * distance;
+			m_updated = true;
 		}
 		inline void MoveRight(float distance)
 		{
 			Vector3 worldRight = m_rotation * -LeftVector;
 			m_position += worldRight * distance;
+			m_updated = true;
 		}
 		inline void MoveUp(float distance)
 		{
 			Vector3 worldUp = m_rotation * UpVector;
 			m_position += worldUp * distance;
+			m_updated = true;
 		}
 
 		inline void RotateAxis(Vector3 axis, float angleRadians)
@@ -60,12 +66,18 @@ namespace components {
 			Quaternion deltaRotation(axis, angleRadians);
 			m_rotation = deltaRotation * m_rotation;
 			m_rotation.Normalize();
+			m_updated = true;
 		}
+
+		inline bool IsUpdated() const { return m_updated; }
+		inline void ResetUpdated() { m_updated = false; }
 
 	private:
 		Vector3 m_position{};
 		Quaternion m_rotation{};
 		Vector3 m_scale{ 1.f };
+		bool m_updated = false;
+
 	};
 
 }
