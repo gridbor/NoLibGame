@@ -39,6 +39,29 @@ namespace components {
 			return mat;
 		}
 
+		inline void MoveForward(float distance)
+		{
+			Vector3 worldForward = m_rotation * ForwardVector;
+			m_position += worldForward * distance;
+		}
+		inline void MoveRight(float distance)
+		{
+			Vector3 worldRight = m_rotation * -LeftVector;
+			m_position += worldRight * distance;
+		}
+		inline void MoveUp(float distance)
+		{
+			Vector3 worldUp = m_rotation * UpVector;
+			m_position += worldUp * distance;
+		}
+
+		inline void RotateAxis(Vector3 axis, float angleRadians)
+		{
+			Quaternion deltaRotation(axis, angleRadians);
+			m_rotation = deltaRotation * m_rotation;
+			m_rotation.Normalize();
+		}
+
 	private:
 		Vector3 m_position{};
 		Quaternion m_rotation{};

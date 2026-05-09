@@ -33,6 +33,6 @@ private:
 	std::unique_ptr<Camera> m_camera;
 	std::unique_ptr<Shaders> m_shaders;
 	std::unique_ptr<Inputs> m_inputs;
-	std::unique_ptr<gizmo::CoordinateSystem> m_testObject;
+	std::unique_ptr<Plane> m_testObject;
 
 };

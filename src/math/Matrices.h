@@ -114,6 +114,27 @@ struct Matrix4 {
 		return result;
 	}
 
+	inline Matrix4 Invert(bool ignoreScale = false) const
+	{
+		Matrix4 inv{};
+		Vector3 isv{ 1.f };
+		if (!ignoreScale) {
+			float sx = m[0] * m[0] + m[1] * m[1] + m[2] * m[2];
+			float sy = m[4] * m[4] + m[5] * m[5] + m[6] * m[6];
+			float sz = m[8] * m[8] + m[9] * m[9] + m[10] * m[10];
+			isv.x = NearlyEquals(sx, 0.f) ? 0.f : 1.f / sx;
+			isv.y = NearlyEquals(sy, 0.f) ? 0.f : 1.f / sy;
+			isv.z = NearlyEquals(sz, 0.f) ? 0.f : 1.f / sz;
+		}
+		inv.m[0] = m[0] * isv.x; inv.m[1] = m[4] * isv.x; inv.m[2] = m[8] * isv.x;
+		inv.m[4] = m[1] * isv.y; inv.m[5] = m[5] * isv.y; inv.m[6] = m[9] * isv.y;
+		inv.m[8] = m[2] * isv.z; inv.m[9] = m[6] * isv.z; inv.m[10] = m[10] * isv.z;
+		inv.m[12] = -(inv.m[0] * m[12] + inv.m[4] * m[13] + inv.m[8] * m[14]);
+		inv.m[13] = -(inv.m[1] * m[12] + inv.m[5] * m[13] + inv.m[9] * m[14]);
+		inv.m[14] = -(inv.m[2] * m[12] + inv.m[6] * m[13] + inv.m[10] * m[14]);
+		return inv;
+	}
+
 	inline std::string ToString() const
 	{
 		std::string s = "[ ";

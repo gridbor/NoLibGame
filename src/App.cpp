@@ -12,10 +12,10 @@
 App::App()
 {
 	m_assets = std::make_unique<Assets>();
-	m_camera = std::make_unique<Camera>();
+	m_camera = std::make_unique<Camera>(Vector3(-3.f, 0.f, 1.f), Vector3(ToRadians(0.f), ToRadians(0.f), ToRadians(0.f)));
 	m_shaders = std::make_unique<Shaders>();
 	m_inputs = std::make_unique<Inputs>();
-	m_testObject = std::make_unique<gizmo::CoordinateSystem>();
+	m_testObject = std::make_unique<Plane>();
 }
 
 App::~App()
@@ -88,4 +88,5 @@ void App::RenderFrame()
 void App::Update(float deltaTime)
 {
 	m_camera->Update(deltaTime);
+	m_inputs->Update(deltaTime);
 }

@@ -11,7 +11,7 @@ struct Quaternion {
 	Quaternion() : w{ 1.f }, x{ 0.f }, y{ 0.f }, z{ 0.f } {}
 	Quaternion(float w, float x, float y, float z) : w{ w }, x{ x }, y{ y }, z{ z } {}
 	// from axis angle 
-	Quaternion(Vector3 axis, float angleRadians)
+	Quaternion(const Vector3& axis, float angleRadians)
 	{
 		float halfAngle = angleRadians * 0.5f;
 		float s = std::sinf(halfAngle);
@@ -19,6 +19,20 @@ struct Quaternion {
 		x = axis.x * s;
 		y = axis.y * s;
 		z = axis.z * s;
+	}
+	// eulearAngles X-Yaw, Y-Pitch, Z-Roll
+	Quaternion(const Vector3& eulerAngles)
+	{
+		float cy = std::cosf(eulerAngles.x * 0.5f);
+		float sy = std::sinf(eulerAngles.x * 0.5f);
+		float cp = std::cosf(eulerAngles.y * 0.5f);
+		float sp = std::sinf(eulerAngles.y * 0.5f);
+		float cr = std::cosf(eulerAngles.z * 0.5f);
+		float sr = std::sinf(eulerAngles.z * 0.5f);
+		w = cr * cp * cy + sr * sp * sy;
+		x = sr * cp * cy - cr * sp * sy;
+		y = cr * sp * cy + sr * cp * sy;
+		z = cr * cp * sy - sr * sp * sy;
 	}
 
 	inline Quaternion operator+(const Quaternion& q) const { return Quaternion(w + q.w, x + q.x, y + q.y, z + q.z); }
@@ -48,7 +62,7 @@ struct Quaternion {
 	inline Quaternion operator/(float s) const { return Quaternion(w / s, x / s, y / s, z / s); }
 	inline Quaternion& operator/=(float s) { w /= s; x /= s; y /= s; z /= s; return *this; }
 
-	inline Vector3 RotateVector(const Vector3& v)
+	inline Vector3 operator*(const Vector3& v) const
 	{
 		Vector3 qv{ x, y, z };
 		Vector3 t = Cross(qv, v);

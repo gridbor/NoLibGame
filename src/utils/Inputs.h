@@ -23,10 +23,13 @@ public:
 	static inline Inputs& Get() { return *s_instance; }
 
 	bool IsKeyDown(unsigned int key) const;
-	Vector2 GetMouseXY() const { return m_mousePosition; }
+	Vector2 GetMousePosition() const { return m_mousePosition; }
+	Vector2 GetMouseDelta() const { return m_mouseDelta; }
 	bool IsMouseButtonPressed(const EMouseButton& button) const;
 
 private:
+	void Update(float deltaTime);
+
 	void AddKey(unsigned int key);
 	void RemoveKey(unsigned int key);
 	void UpdateMousePosition(int x, int y);
@@ -38,5 +41,6 @@ private:
 	std::vector<unsigned int> m_keyboard;
 	std::vector<EMouseButton> m_mouseButtons;
 	Vector2 m_mousePosition{};
+	Vector2 m_mouseDelta{};
 
 };

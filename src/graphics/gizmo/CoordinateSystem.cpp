@@ -24,7 +24,7 @@ namespace gizmo {
 					v.y = 1.f;
 					v.z = 0.f;
 				}
-				float co = (float)im * 0.2f;
+				float co = i == 12 ? 0.6f : (im % 2 == 0 ? 0.f : 0.2f);
 				if (a < 1) {
 					m_vertices.push_back(SimpleVertex{ Vector3(v.y, v.x, v.z), Vector3(1.f - co, 0.f, 0.f) });
 				}

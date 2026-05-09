@@ -27,6 +27,11 @@ bool Inputs::IsMouseButtonPressed(const EMouseButton& button) const
 	return std::find(m_mouseButtons.begin(), m_mouseButtons.end(), button) != m_mouseButtons.end();
 }
 
+void Inputs::Update(float deltaTime)
+{
+	m_mouseDelta = Vector2();
+}
+
 void Inputs::AddKey(unsigned int key)
 {
 	if (IsKeyDown(key)) return;
@@ -40,12 +45,14 @@ void Inputs::RemoveKey(unsigned int key)
 
 void Inputs::UpdateMousePosition(int x, int y)
 {
-	m_mousePosition.x = (float)x;
-	m_mousePosition.y = (float)y;
+	Vector2 v{ (float)x, (float)y };
+	m_mouseDelta = v - m_mousePosition;
+	m_mousePosition = v;
 }
 
 void Inputs::AddMouseButton(const EMouseButton& button)
 {
+	if (IsMouseButtonPressed(button)) return;
 	m_mouseButtons.push_back(button);
 }
 

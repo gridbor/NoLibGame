@@ -1,8 +1,6 @@
 #pragma once
-
-
-#include "Vectors.h"
-#include "Matrices.h"
+#include <cmath>
+#include <limits>
 
 
 inline const float Pi = 3.14159265358979323846f;
@@ -10,12 +8,18 @@ inline const float Pi = 3.14159265358979323846f;
 inline float ToRadians(float degree) { return degree * Pi / 180.f; }
 inline float ToDegree(float radians) { return radians * 180.f / Pi; }
 
+inline bool NearlyEquals(float a, float b, float epsilon = std::numeric_limits<float>::epsilon()) { return std::fabsf(a - b) < epsilon; }
+inline float Clamp(float t, float min = 0.f, float max = 1.f) { return t < min ? min : (t > max ? max : t); }
+
+
+#include "Vectors.h"
+#include "Matrices.h"
+
+
 inline const Vector3 ZeroVector = Vector3{};
 inline const Vector3 UpVector = Vector3{ 0.f, 0.f, 1.f };
 inline const Vector3 ForwardVector = Vector3{ 1.f, 0.f, 0.f };
-inline const Vector3 RightVector = Vector3{ 0.f, 1.f, 0.f };
-
-inline bool NearlyEquals(float a, float b, float epsilon = std::numeric_limits<float>::epsilon()) { return std::fabsf(a - b) < epsilon; }
+inline const Vector3 LeftVector = Vector3{ 0.f, 1.f, 0.f };
 
 inline float Dot(const Vector3& v1, const Vector3& v2) { return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z; }
 inline Vector3 Cross(const Vector3& v1, const Vector3& v2)
