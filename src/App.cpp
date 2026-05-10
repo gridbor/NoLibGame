@@ -16,10 +16,12 @@ App::App()
 	m_shaders = std::make_unique<Shaders>();
 	m_inputs = std::make_unique<Inputs>();
 	m_testObject = std::make_unique<Plane>();
+	m_coords = std::make_unique<gizmo::CoordinateSystem>();
 }
 
 App::~App()
 {
+	m_coords.reset();
 	m_testObject.reset();
 	m_inputs.reset();
 	m_shaders.reset();
@@ -34,9 +36,14 @@ void App::Init(HWND hwnd, int width, int height)
 	m_width = width;
 	m_height = height;
 
-	ShaderProgram* program = m_shaders->CreateShaderProgram("default", "shaders/default.vert", "shaders/default.frag");
+	m_shaders->CreateShaderProgram("default", "shaders/default.vert", "shaders/default.frag");
+	m_shaders->CreateShaderProgram("simple", "shaders/color_only.vert", "shaders/color_only.frag");
+
 	m_camera->Init(45.f, (float)m_width / (float)m_height, 0.1f, 1000.f);
+	m_gizmoView = LookAt(Vector3(0.f, 0.f, 2.5f), Vector3(), Vector3(0.f, 1.f, 0.f));
+
 	m_testObject->Init();
+	m_coords->Init();
 
 	m_inited = true;
 }
@@ -78,11 +85,26 @@ LRESULT App::HandleMessage(UINT msg, WPARAM wparam, LPARAM lparam)
 
 void App::RenderFrame()
 {
-	m_shaders->Use("default");
-
+	GLint viewport[4];
+	glGetIntegerv(GL_VIEWPORT, viewport);
 	m_camera->RefreshBuffer();
-
+	m_shaders->Use("default");
 	m_testObject->Render();
+
+
+	glClear(GL_DEPTH_BUFFER_BIT);
+	glViewport(0, 0, 150, 150);
+	CameraData cd{};
+	cd.projection = m_camera->GetPerspective();
+	Matrix4 viewMatrix = m_camera->GetView();
+	for (size_t i = 0; i < 3; i++) viewMatrix.m4[i] = 0.f;
+	cd.view = m_gizmoView;
+	glNamedBufferSubData(m_camera->GetUniformID(), 0, sizeof(CameraData), &cd);
+	m_shaders->Use("simple");
+	m_shaders->SetUniformMatrix("uModel", viewMatrix);
+	m_coords->Render();
+
+	glViewport(viewport[0], viewport[1], viewport[2], viewport[3]);
 }
 
 void App::Update(float deltaTime)

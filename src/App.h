@@ -34,5 +34,7 @@ private:
 	std::unique_ptr<Shaders> m_shaders;
 	std::unique_ptr<Inputs> m_inputs;
 	std::unique_ptr<Plane> m_testObject;
+	Matrix4 m_gizmoView{};
+	std::unique_ptr<gizmo::CoordinateSystem> m_coords;
 
 };
