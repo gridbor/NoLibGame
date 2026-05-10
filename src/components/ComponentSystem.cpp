@@ -11,6 +11,10 @@ namespace components {
 
 	ComponentSystem::~ComponentSystem()
 	{
+		for (auto& [_, comp] : m_components) {
+			comp.reset();
+		}
+		m_components.clear();
 	}
 
 	void ComponentSystem::Update(float deltaTime)

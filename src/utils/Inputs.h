@@ -22,6 +22,7 @@ public:
 
 	static inline Inputs& Get() { return *s_instance; }
 
+	bool HasAnyPressedKey() const { return !m_keyboard.empty(); }
 	bool IsKeyDown(unsigned int key) const;
 	Vector2 GetMousePosition() const { return m_mousePosition; }
 	Vector2 GetMouseDelta() const { return m_mouseDelta; }

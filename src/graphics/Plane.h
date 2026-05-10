@@ -31,12 +31,13 @@ public:
 
 	virtual void Render() override
 	{
-		Renderable::Render();
-
 		if (Inputs::Get().IsMouseButtonPressed(EMouseButton::Left)) {
-			m_rotation = Quaternion(Vector3(1.f, 1.f, 1.f), 0.1f) * m_rotation;
-			m_rotation.Normalize();
-			m_modelMatrix = m_rotation.ToMatrix4();
+			auto transform = GetComponent<components::Transform>();
+			if (transform != nullptr) {
+				transform->RotateAxis(UpVector, 0.1f);
+			}
 		}
+
+		Renderable::Render();
 	}
 };

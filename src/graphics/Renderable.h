@@ -4,10 +4,12 @@
 #include "GLFunctions.h"
 #include "Shaders.h"
 #include "RenderData.h"
+#include "components/ComponentSystem.h"
+#include "components/Transform.h"
 
 
 template<typename T>
-class Renderable {
+class Renderable : public components::ComponentSystem {
 protected:
 	Renderable() = default;
 
@@ -28,6 +30,11 @@ public:
 	{
 		if (m_indices.empty()) return;
 
+		auto transform = GetComponent<components::Transform>();
+		if (transform != nullptr && transform->IsUpdated()) {
+			m_modelMatrix = transform->GetMatrix();
+			transform->ResetUpdated();
+		}
 		Shaders::Get().SetUniformMatrix("uModel", m_modelMatrix);
 
 		glBindVertexArray(m_vao);
@@ -64,5 +71,5 @@ protected:
 	std::vector<T> m_vertices;
 	std::vector<uint16_t> m_indices;
 	Matrix4 m_modelMatrix{};
-	Quaternion m_rotation{};
+
 };

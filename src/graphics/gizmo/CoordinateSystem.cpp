@@ -10,7 +10,7 @@ namespace gizmo {
 		float w = 1.f - (2.f * ps);
 		float hs = s * 0.5f;
 		for (size_t a = 0; a < 3; a++) {
-			int vcount = m_vertices.size();
+			size_t vcount = m_vertices.size();
 			for (size_t i = 0; i < 13; i++) {
 				Vector3 v{};
 				size_t im = i % 4;
@@ -36,15 +36,15 @@ namespace gizmo {
 				}
 			}
 			m_indices.insert(m_indices.end(), {
-				(unsigned short)(vcount + 0), (unsigned short)(vcount + 5), (unsigned short)(vcount + 1), (unsigned short)(vcount + 0), (unsigned short)(vcount + 4), (unsigned short)(vcount + 5),
-				(unsigned short)(vcount + 3), (unsigned short)(vcount + 4), (unsigned short)(vcount + 0), (unsigned short)(vcount + 3), (unsigned short)(vcount + 7), (unsigned short)(vcount + 4),
-				(unsigned short)(vcount + 2), (unsigned short)(vcount + 6), (unsigned short)(vcount + 7), (unsigned short)(vcount + 2), (unsigned short)(vcount + 7), (unsigned short)(vcount + 3),
-				(unsigned short)(vcount + 1), (unsigned short)(vcount + 5), (unsigned short)(vcount + 6), (unsigned short)(vcount + 1), (unsigned short)(vcount + 6), (unsigned short)(vcount + 2),
-				(unsigned short)(vcount + 8), (unsigned short)(vcount + 9), (unsigned short)(vcount + 10), (unsigned short)(vcount + 8), (unsigned short)(vcount + 10), (unsigned short)(vcount + 11),
-				(unsigned short)(vcount + 8), (unsigned short)(vcount + 12), (unsigned short)(vcount + 9),
-				(unsigned short)(vcount + 8), (unsigned short)(vcount + 11), (unsigned short)(vcount + 12),
-				(unsigned short)(vcount + 11), (unsigned short)(vcount + 10), (unsigned short)(vcount + 12),
-				(unsigned short)(vcount + 9), (unsigned short)(vcount + 12), (unsigned short)(vcount + 10)
+				(unsigned short)(vcount + 0), (unsigned short)(vcount + (a == 1 ? 1 : 5)), (unsigned short)(vcount + (a == 1 ? 5 : 1)), (unsigned short)(vcount + 0), (unsigned short)(vcount + (a == 1 ? 5 : 4)), (unsigned short)(vcount + (a == 1 ? 4 : 5)),
+				(unsigned short)(vcount + 3), (unsigned short)(vcount + (a == 1 ? 0 : 4)), (unsigned short)(vcount + (a == 1 ? 4 : 0)), (unsigned short)(vcount + 3), (unsigned short)(vcount + (a == 1 ? 4 : 7)), (unsigned short)(vcount + (a == 1 ? 7 : 4)),
+				(unsigned short)(vcount + 2), (unsigned short)(vcount + (a == 1 ? 7 : 6)), (unsigned short)(vcount + (a == 1 ? 6 : 7)), (unsigned short)(vcount + 2), (unsigned short)(vcount + (a == 1 ? 3 : 7)), (unsigned short)(vcount + (a == 1 ? 7 : 3)),
+				(unsigned short)(vcount + 1), (unsigned short)(vcount + (a == 1 ? 6 : 5)), (unsigned short)(vcount + (a == 1 ? 5 : 6)), (unsigned short)(vcount + 1), (unsigned short)(vcount + (a == 1 ? 2 : 6)), (unsigned short)(vcount + (a == 1 ? 6 : 2)),
+				(unsigned short)(vcount + 8), (unsigned short)(vcount + (a == 1 ? 10 : 9)), (unsigned short)(vcount + (a == 1 ? 9 : 10)), (unsigned short)(vcount + 8), (unsigned short)(vcount + (a == 1 ? 11 : 10)), (unsigned short)(vcount + (a == 1 ? 10 : 11)),
+				(unsigned short)(vcount + 8), (unsigned short)(vcount + (a == 1 ? 9 : 12)), (unsigned short)(vcount + (a == 1 ? 12 : 9)),
+				(unsigned short)(vcount + 8), (unsigned short)(vcount + (a == 1 ? 12 : 11)), (unsigned short)(vcount + (a == 1 ? 11 : 12)),
+				(unsigned short)(vcount + 11), (unsigned short)(vcount + (a == 1 ? 12 : 10)), (unsigned short)(vcount + (a == 1 ? 10 : 12)),
+				(unsigned short)(vcount + 9), (unsigned short)(vcount + (a == 1 ? 10 : 12)), (unsigned short)(vcount + (a == 1 ? 12 : 10))
 			});
 		}
 	}

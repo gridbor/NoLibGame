@@ -17,7 +17,6 @@ public:
 	const CameraData& GetData() const { return m_data; }
 	GLuint GetUniformID() const { return m_uniformID; }
 
-	virtual void InputProcess();
 	virtual void Update(float deltaTime);
 	virtual void RefreshBuffer();
 
@@ -26,5 +25,7 @@ protected:
 	CameraData m_data{};
 	// In Radians
 	Vector3 m_eulerAngles{};
+	float m_sensitivity = 0.2f;
+	float m_speed = 2.f;
 
 };

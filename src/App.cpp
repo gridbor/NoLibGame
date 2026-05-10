@@ -34,7 +34,7 @@ void App::Init(HWND hwnd, int width, int height)
 	m_width = width;
 	m_height = height;
 
-	ShaderProgram* program = m_shaders->CreateShaderProgram("default", "shaders/color_only.vert", "shaders/color_only.frag");
+	ShaderProgram* program = m_shaders->CreateShaderProgram("default", "shaders/default.vert", "shaders/default.frag");
 	m_camera->Init(45.f, (float)m_width / (float)m_height, 0.1f, 1000.f);
 	m_testObject->Init();
 
