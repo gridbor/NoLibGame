@@ -85,15 +85,15 @@ LRESULT App::HandleMessage(UINT msg, WPARAM wparam, LPARAM lparam)
 
 void App::RenderFrame()
 {
-	GLint viewport[4];
-	glGetIntegerv(GL_VIEWPORT, viewport);
 	m_camera->RefreshBuffer();
 	m_shaders->Use("default");
 	m_testObject->Render();
 
-
+	float ratio = (float)m_width / (float)m_height;
+	float viewportSize = (float)m_width * 0.2f;
+	glClearColor(0.3f, 0.3f, 0.3f, 1.f);
 	glClear(GL_DEPTH_BUFFER_BIT);
-	glViewport(0, 0, 150, 150);
+	glViewport(0, 0, (GLsizei)viewportSize, (GLsizei)(viewportSize / ratio));
 	CameraData cd{};
 	cd.projection = m_camera->GetPerspective();
 	Matrix4 viewMatrix = m_camera->GetView();
@@ -104,7 +104,7 @@ void App::RenderFrame()
 	m_shaders->SetUniformMatrix("uModel", viewMatrix);
 	m_coords->Render();
 
-	glViewport(viewport[0], viewport[1], viewport[2], viewport[3]);
+	glViewport(0, 0, m_width, m_height);
 }
 
 void App::Update(float deltaTime)
