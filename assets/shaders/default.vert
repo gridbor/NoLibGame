@@ -18,7 +18,8 @@ out vec2 vUV;
 void main()
 {
 	vColor = aColor;
-	vNormal = aNormal;
+	mat3 normalMatrix = transpose(inverse(mat3(uModel)));
+	vNormal = normalMatrix * aNormal;
 	vUV = aUV;
 	gl_Position = projection * view * uModel * vec4(aPosition, 1.0);
 }

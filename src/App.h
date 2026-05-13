@@ -12,6 +12,7 @@ class Inputs;
 class Triangle;
 class Plane;
 namespace gizmo { class CoordinateSystem; }
+namespace lights { class Light; }
 
 class App {
 public:
@@ -36,5 +37,6 @@ private:
 	std::unique_ptr<Plane> m_testObject;
 	Matrix4 m_gizmoView{};
 	std::unique_ptr<gizmo::CoordinateSystem> m_coords;
+	std::unique_ptr<lights::Light> m_lights;
 
 };

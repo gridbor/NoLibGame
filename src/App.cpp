@@ -7,6 +7,7 @@
 #include "utils/Logger.h"
 #include "utils/Inputs.h"
 #include "graphics/gizmo/CoordinateSystem.h"
+#include "graphics/lights/Light.h"
 
 
 App::App()
@@ -17,10 +18,12 @@ App::App()
 	m_inputs = std::make_unique<Inputs>();
 	m_testObject = std::make_unique<Plane>();
 	m_coords = std::make_unique<gizmo::CoordinateSystem>();
+	m_lights = std::make_unique<lights::Light>(Vector3(0.f, -.5f, -1.f));
 }
 
 App::~App()
 {
+	m_lights.reset();
 	m_coords.reset();
 	m_testObject.reset();
 	m_inputs.reset();
@@ -44,6 +47,7 @@ void App::Init(HWND hwnd, int width, int height)
 
 	m_testObject->Init();
 	m_coords->Init();
+	m_lights->ApplyToProgram(m_shaders->GetProgram("default")->GetProgramID(), 4);
 
 	m_inited = true;
 }
