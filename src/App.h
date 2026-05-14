@@ -12,6 +12,7 @@ class Inputs;
 class World;
 namespace gizmo { class CoordinateSystem; }
 namespace lights { class Light; }
+namespace text { class SymbolsGenerator; }
 
 class App {
 public:
@@ -37,5 +38,6 @@ private:
 	Matrix4 m_gizmoView{};
 	std::unique_ptr<gizmo::CoordinateSystem> m_coords;
 	std::unique_ptr<lights::Light> m_lights;
+	std::unique_ptr<text::SymbolsGenerator> m_symbolsGen;
 
 };

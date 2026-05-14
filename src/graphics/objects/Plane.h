@@ -1,5 +1,5 @@
 #pragma once
-#include "objects/WorldObject.h"
+#include "graphics/objects/WorldObject.h"
 
 
 class Texture;

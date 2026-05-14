@@ -1,5 +1,5 @@
 #include "Plane.h"
-#include "Texture.h"
+#include "graphics/Texture.h"
 
 
 Plane::Plane() : Plane(Vector3(1.f)) {}

@@ -1,5 +1,5 @@
 #include "World.h"
-#include "graphics/Plane.h"
+#include "Plane.h"
 
 
 World::World()

@@ -2,13 +2,12 @@
 #include "assets/Assets.h"
 #include "graphics/Camera.h"
 #include "graphics/Shaders.h"
-#include "graphics/Triangle.h"
-#include "graphics/Plane.h"
 #include "utils/Logger.h"
 #include "utils/Inputs.h"
 #include "graphics/gizmo/CoordinateSystem.h"
 #include "graphics/lights/Light.h"
 #include "graphics/objects/World.h"
+#include "utils/text/SymbolsGenerator.h"
 
 
 App::App()
@@ -20,10 +19,12 @@ App::App()
 	m_world = std::make_unique<World>();
 	m_coords = std::make_unique<gizmo::CoordinateSystem>();
 	m_lights = std::make_unique<lights::Light>(Vector3(0.f, -.5f, -1.f));
+	m_symbolsGen = std::make_unique<text::SymbolsGenerator>();
 }
 
 App::~App()
 {
+	m_symbolsGen.reset();
 	m_lights.reset();
 	m_coords.reset();
 	m_world.reset();
@@ -51,6 +52,8 @@ void App::Init(HWND hwnd, int width, int height)
 
 	m_coords->Init();
 	m_lights->ApplyToProgram(m_shaders->GetProgram("default")->GetProgramID(), 4);
+
+	m_symbolsGen->Init();
 
 	m_inited = true;
 }
@@ -111,6 +114,13 @@ void App::RenderFrame()
 	m_coords->Render();
 
 	glViewport(0, 0, m_width, m_height);
+
+	glClear(GL_DEPTH_BUFFER_BIT);
+	cd.projection = Matrix4();
+	cd.view = Matrix4();
+	glNamedBufferSubData(m_camera->GetUniformID(), 0, sizeof(CameraData), &cd);
+	m_shaders->SetUniformMatrix("uModel", Matrix4());
+	m_symbolsGen->Render();
 }
 
 void App::Update(float deltaTime)
