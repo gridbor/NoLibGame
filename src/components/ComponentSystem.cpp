@@ -19,6 +19,9 @@ namespace components {
 
 	void ComponentSystem::Update(float deltaTime)
 	{
+		for (const auto& [_, comp] : m_components) {
+			if (comp) comp->Update(deltaTime);
+		}
 	}
 
 }
