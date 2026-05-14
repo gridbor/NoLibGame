@@ -18,7 +18,6 @@ App::App()
 	m_shaders = std::make_unique<Shaders>();
 	m_inputs = std::make_unique<Inputs>();
 	m_world = std::make_unique<World>();
-	m_testObject = std::make_unique<Plane>();
 	m_coords = std::make_unique<gizmo::CoordinateSystem>();
 	m_lights = std::make_unique<lights::Light>(Vector3(0.f, -.5f, -1.f));
 }
@@ -27,7 +26,6 @@ App::~App()
 {
 	m_lights.reset();
 	m_coords.reset();
-	m_testObject.reset();
 	m_world.reset();
 	m_inputs.reset();
 	m_shaders.reset();
@@ -49,7 +47,8 @@ void App::Init(HWND hwnd, int width, int height)
 	m_gizmoView = LookAt(Vector3(0.f, 0.f, 2.5f), Vector3(), Vector3(0.f, 1.f, 0.f));
 
 	m_world->Init();
-	m_testObject->Init();
+	m_world->CreateWorldObject(WorldObjectProperty{});
+
 	m_coords->Init();
 	m_lights->ApplyToProgram(m_shaders->GetProgram("default")->GetProgramID(), 4);
 
@@ -96,7 +95,6 @@ void App::RenderFrame()
 	m_camera->RefreshBuffer();
 	m_shaders->Use("default");
 	m_world->Render();
-	m_testObject->Render();
 
 	float ratio = (float)m_width / (float)m_height;
 	float viewportSize = (float)m_width * 0.2f;

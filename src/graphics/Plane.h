@@ -1,12 +1,10 @@
 #pragma once
-#include "Renderable.h"
-#include "utils/Logger.h"
-#include "utils/Inputs.h"
+#include "objects/WorldObject.h"
 
 
 class Texture;
 
-class Plane : public Renderable<Vertex> {
+class Plane : public WorldObject {
 public:
 	Plane();
 	Plane(const Vector3& color);

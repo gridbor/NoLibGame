@@ -51,10 +51,12 @@ void Plane::Init()
 	SetAttribute(3, 2, offsetof(Vertex, uv));
 
 	m_texture->Init(Assets::Get().LoadTextureData("images/test.png"));
+
+	WorldObject::Init();
 }
 
 void Plane::Render()
 {
 	glBindTextureUnit(0, m_texture->GetTextureID());
-	Renderable::Render();
+	WorldObject::Render();
 }
