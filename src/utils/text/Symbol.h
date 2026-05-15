@@ -10,16 +10,16 @@ namespace text {
 	public:
 		Symbol()
 		{
-			m_vertices.push_back(SimpleVertex(Vector3(-0.5f, -0.5f, 0.f), Vector3(1.f, 0.f, 0.f)));
-			m_vertices.push_back(SimpleVertex(Vector3(-0.5f, 0.5f, 0.f), m_color));
-			m_vertices.push_back(SimpleVertex(Vector3(0.5f, 0.5f, 0.f), Vector3(0.f, 0.f, 1.f)));
-			m_vertices.push_back(SimpleVertex(Vector3(0.5f, -0.5f, 0.f), m_color));
-			m_indices = { 0, 2, 1, 0, 3, 2 };
+			m_commands.push_back(SymbolCommand(1, Vector2(0.f, 0.f), Vector2(0.5f, 0.1f), Vector2(), Vector3(0.f, 1.f, 1.f)));
+			m_commands.push_back(SymbolCommand(0, Vector2(-0.5f, -0.5f), Vector2(0.f, 0.5f), Vector2(), Vector3(1.f, 0.f, 0.f)));
+			m_commands.push_back(SymbolCommand(0, Vector2(0.5f, -0.5f), Vector2(0.f, 0.5f), Vector2(), m_color));
+			m_commands.push_back(SymbolCommand(0, Vector2(-0.5f, -0.1f), Vector2(0.5f, -0.1f), Vector2(), Vector3(0.f, 0.f, 1.f)));
+			m_indices = { 0, 1, 2, 3 };
 		}
 
 		~Symbol()
 		{
-			m_vertices.clear();
+			m_commands.clear();
 			m_indices.clear();
 
 			glDeleteBuffers(1, &m_ebo);
@@ -31,8 +31,11 @@ namespace text {
 		{
 			CreateArrayAndBuffers();
 
-			SetAttribute(0, 3, offsetof(SimpleVertex, position));
-			SetAttribute(1, 3, offsetof(SimpleVertex, color));
+			SetAttribute(0, 1, offsetof(SymbolCommand, opType));
+			SetAttribute(1, 2, offsetof(SymbolCommand, v0));
+			SetAttribute(2, 2, offsetof(SymbolCommand, v1));
+			SetAttribute(3, 2, offsetof(SymbolCommand, v2));
+			SetAttribute(4, 3, offsetof(SymbolCommand, color));
 		}
 
 		void Render()
@@ -40,7 +43,7 @@ namespace text {
 			if (m_indices.empty()) return;
 
 			glBindVertexArray(m_vao);
-			glDrawElements(GL_TRIANGLES, m_indices.size(), GL_UNSIGNED_SHORT, 0);
+			glDrawElements(GL_POINTS, m_indices.size(), GL_UNSIGNED_SHORT, 0);
 		}
 
 	private:
@@ -50,10 +53,10 @@ namespace text {
 			glCreateBuffers(1, &m_vbo);
 			glCreateBuffers(1, &m_ebo);
 
-			glNamedBufferData(m_vbo, m_vertices.size() * sizeof(SimpleVertex), m_vertices.data(), GL_STATIC_DRAW);
+			glNamedBufferData(m_vbo, m_commands.size() * sizeof(SymbolCommand), m_commands.data(), GL_STATIC_DRAW);
 			glNamedBufferData(m_ebo, m_indices.size() * sizeof(uint16_t), m_indices.data(), GL_STATIC_DRAW);
 
-			glVertexArrayVertexBuffer(m_vao, 0, m_vbo, 0, sizeof(SimpleVertex));
+			glVertexArrayVertexBuffer(m_vao, 0, m_vbo, 0, sizeof(SymbolCommand));
 			glVertexArrayElementBuffer(m_vao, m_ebo);
 		}
 
@@ -68,7 +71,7 @@ namespace text {
 		GLuint m_vao = 0;
 		GLuint m_vbo = 0;
 		GLuint m_ebo = 0;
-		std::vector<SimpleVertex> m_vertices;
+		std::vector<SymbolCommand> m_commands;
 		std::vector<uint16_t> m_indices;
 		Vector3 m_color{ 1.f };
 

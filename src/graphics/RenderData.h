@@ -2,6 +2,14 @@
 #include "math/Math.h"
 
 
+struct SymbolCommand {
+	unsigned int opType;
+	Vector2 v0;
+	Vector2 v1;
+	Vector2 v2;
+	Vector3 color;
+};
+
 struct SimpleVertex {
 	Vector3 position;
 	Vector3 color;

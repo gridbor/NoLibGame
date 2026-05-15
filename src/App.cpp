@@ -43,6 +43,7 @@ void App::Init(HWND hwnd, int width, int height)
 
 	m_shaders->CreateShaderProgram("default", "shaders/default.vert", "shaders/default.frag");
 	m_shaders->CreateShaderProgram("simple", "shaders/color_only.vert", "shaders/color_only.frag");
+	m_shaders->CreateShaderProgram("symbol", "shaders/symbol.vert", "shaders/symbol.frag", "shaders/symbol.geom");
 
 	m_camera->Init(45.f, (float)m_width / (float)m_height, 0.1f, 1000.f);
 	m_gizmoView = LookAt(Vector3(0.f, 0.f, 2.5f), Vector3(), Vector3(0.f, 1.f, 0.f));
@@ -116,10 +117,7 @@ void App::RenderFrame()
 	glViewport(0, 0, m_width, m_height);
 
 	glClear(GL_DEPTH_BUFFER_BIT);
-	cd.projection = Matrix4();
-	cd.view = Matrix4();
-	glNamedBufferSubData(m_camera->GetUniformID(), 0, sizeof(CameraData), &cd);
-	m_shaders->SetUniformMatrix("uModel", Matrix4());
+	m_shaders->Use("symbol");
 	m_symbolsGen->Render();
 }
 

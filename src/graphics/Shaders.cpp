@@ -9,7 +9,8 @@ ShaderProgram::ShaderProgram()
 
 ShaderProgram::~ShaderProgram()
 {
-	glDeleteProgram(m_programID);
+	if (!m_shaderSources.empty()) m_shaderSources.clear();
+	if (m_programID != 0) glDeleteProgram(m_programID);
 }
 
 void ShaderProgram::CompileShader(GLenum type, const std::string_view& path)
@@ -33,8 +34,9 @@ void ShaderProgram::CompileShader(GLenum type, const std::string_view& path)
 void ShaderProgram::LinkGraphicShaders()
 {
 	m_programID = glCreateProgram();
-	glAttachShader(m_programID, m_shaderSources[GL_VERTEX_SHADER]);
-	glAttachShader(m_programID, m_shaderSources[GL_FRAGMENT_SHADER]);
+	for (const auto& [_, source] : m_shaderSources) {
+		glAttachShader(m_programID, source);
+	}
 	glLinkProgram(m_programID);
 
 	GLint success;
@@ -44,10 +46,11 @@ void ShaderProgram::LinkGraphicShaders()
 		glGetProgramInfoLog(m_programID, 512, NULL, infoLog);
 		LLog("ERROR: Shader program linkage failed! {}", infoLog);
 	}
-	glDeleteShader(m_shaderSources[GL_VERTEX_SHADER]);
-	glDeleteShader(m_shaderSources[GL_FRAGMENT_SHADER]);
-	m_shaderSources.erase(GL_VERTEX_SHADER);
-	m_shaderSources.erase(GL_FRAGMENT_SHADER);
+
+	for (auto& [_, source] : m_shaderSources) {
+		glDeleteShader(source);
+	}
+	m_shaderSources.clear();
 }
 
 
@@ -66,7 +69,9 @@ Shaders::~Shaders()
 	m_shaders.clear();
 }
 
-ShaderProgram* Shaders::CreateShaderProgram(const std::string_view& name, const std::string_view& vertexPath, const std::string_view& fragmentPath)
+ShaderProgram* Shaders::CreateShaderProgram(const std::string_view& name,
+	const std::string_view& vertexPath, const std::string_view& fragmentPath,
+	const std::string_view& geometryPath, const std::string_view& computePath)
 {
 	if (m_shaders.contains(name)) {
 		return m_shaders[name].get();
@@ -75,6 +80,8 @@ ShaderProgram* Shaders::CreateShaderProgram(const std::string_view& name, const 
 	std::unique_ptr<ShaderProgram> program = std::make_unique<ShaderProgram>();
 	program->CompileShader(GL_VERTEX_SHADER, vertexPath);
 	program->CompileShader(GL_FRAGMENT_SHADER, fragmentPath);
+	if (!geometryPath.empty()) program->CompileShader(GL_GEOMETRY_SHADER, geometryPath);
+	if (!computePath.empty()) program->CompileShader(GL_COMPUTE_SHADER, computePath);
 	program->LinkGraphicShaders();
 	m_shaders[name] = std::move(program);
 	return m_shaders[name].get();

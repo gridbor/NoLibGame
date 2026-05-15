@@ -30,7 +30,9 @@ public:
 
 	static inline Shaders& Get() { return *s_instance; }
 
-	ShaderProgram* CreateShaderProgram(const std::string_view& name, const std::string_view& vertexPath, const std::string_view& fragmentPath);
+	ShaderProgram* CreateShaderProgram(const std::string_view& name,
+		const std::string_view& vertexPath, const std::string_view& fragmentPath,
+		const std::string_view& geometryPath = "", const std::string_view& computePath = "");
 	ShaderProgram* GetProgram(const std::string_view& name) const;
 	void Use(const std::string_view& name);
 	void SetUniformMatrix(const std::string_view& uniformName, const Matrix4& mat);
@@ -38,6 +40,6 @@ public:
 private:
 	static inline Shaders* s_instance = nullptr;
 	std::unordered_map<std::string_view, std::unique_ptr<ShaderProgram>> m_shaders;
-	std::string_view m_currentUse = "";
+	std::string_view m_currentUse;
 
 };
